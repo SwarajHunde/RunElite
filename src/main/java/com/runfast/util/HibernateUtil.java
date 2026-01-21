@@ -1,49 +1,59 @@
-public static SessionFactory getSessionFactory() {
+package com.runfast.util;
 
-    if (sessionFactory == null) {
-        try {
+import java.util.Properties;
 
-            String dbUrl = System.getenv("DB_URL");
-            String dbUser = System.getenv("DB_USERNAME");
-            String dbPass = System.getenv("DB_PASSWORD");
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
-            System.out.println("===== ENV CHECK =====");
-            System.out.println("DB_URL      = " + dbUrl);
-            System.out.println("DB_USERNAME = " + dbUser);
-            System.out.println("DB_PASSWORD = " + (dbPass == null ? "NULL" : "FOUND"));
-            System.out.println("=====================");
+import com.runfast.entity.GroupMember;
+import com.runfast.entity.Runner;
+import com.runfast.entity.RunningGroup;
 
-            // 🔴 THIS IS THE MISSING PART
-            if (dbUrl == null || dbUser == null || dbPass == null) {
-                throw new RuntimeException(
-                    "Database environment variables are missing. " +
-                    "Please check DB_URL, DB_USERNAME, DB_PASSWORD in Railway."
-                );
-            }
+public class HibernateUtil {
 
-            Properties props = new Properties();
-            props.put("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
-            props.put("hibernate.connection.url", dbUrl);
-            props.put("hibernate.connection.username", dbUser);
-            props.put("hibernate.connection.password", dbPass);
-            props.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
-            props.put("hibernate.hbm2ddl.auto", "update");
-            props.put("hibernate.show_sql", "true");
+    private static SessionFactory sessionFactory;
 
-            Configuration configuration = new Configuration();
-            configuration.setProperties(props);
-
-            configuration.addAnnotatedClass(com.runfast.entity.RunningGroup.class);
-            configuration.addAnnotatedClass(com.runfast.entity.Runner.class);
-            configuration.addAnnotatedClass(com.runfast.entity.GroupMember.class);
-
-            sessionFactory = configuration.buildSessionFactory();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to initialize Hibernate", e);
-        }
+    private HibernateUtil() {
     }
 
-    return sessionFactory;
+    public static SessionFactory getSessionFactory() {
+
+        if (sessionFactory == null) {
+            try {
+                String dbUrl = System.getenv("DB_URL");
+                String dbUser = System.getenv("DB_USERNAME");
+                String dbPass = System.getenv("DB_PASSWORD");
+
+                if (dbUrl == null || dbUser == null || dbPass == null) {
+                    throw new RuntimeException(
+                        "Missing DB environment variables: DB_URL / DB_USERNAME / DB_PASSWORD"
+                    );
+                }
+
+                Properties props = new Properties();
+                props.put("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
+                props.put("hibernate.connection.url", dbUrl);
+                props.put("hibernate.connection.username", dbUser);
+                props.put("hibernate.connection.password", dbPass);
+                props.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+                props.put("hibernate.hbm2ddl.auto", "update");
+                props.put("hibernate.show_sql", "true");
+
+                Configuration configuration = new Configuration();
+                configuration.setProperties(props);
+
+                configuration.addAnnotatedClass(RunningGroup.class);
+                configuration.addAnnotatedClass(Runner.class);
+                configuration.addAnnotatedClass(GroupMember.class);
+
+                sessionFactory = configuration.buildSessionFactory();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Failed to initialize Hibernate", e);
+            }
+        }
+
+        return sessionFactory;
+    }
 }
