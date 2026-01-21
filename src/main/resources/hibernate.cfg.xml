@@ -5,17 +5,25 @@
 <hibernate-configuration>
     <session-factory>
 
+        <!-- JDBC -->
         <property name="hibernate.connection.driver_class">
             com.mysql.cj.jdbc.Driver
         </property>
 
+        <!-- CLOUD DB (ENV VARIABLES) -->
         <property name="hibernate.connection.url">
-            jdbc:mysql://localhost:3306/runfast_db
+            ${DB_URL}
         </property>
 
-        <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">Swaraj@143</property>
+        <property name="hibernate.connection.username">
+            ${DB_USERNAME}
+        </property>
 
+        <property name="hibernate.connection.password">
+            ${DB_PASSWORD}
+        </property>
+
+        <!-- HIBERNATE -->
         <property name="hibernate.dialect">
             org.hibernate.dialect.MySQL8Dialect
         </property>
@@ -23,10 +31,10 @@
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
 
+        <!-- ENTITIES -->
         <mapping class="com.runfast.entity.RunningGroup"/>
-		<mapping class="com.runfast.entity.Runner"/>
-		<mapping class="com.runfast.entity.GroupMember"/>
-
+        <mapping class="com.runfast.entity.Runner"/>
+        <mapping class="com.runfast.entity.GroupMember"/>
 
     </session-factory>
 </hibernate-configuration>
