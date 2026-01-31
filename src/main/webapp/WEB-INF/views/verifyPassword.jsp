@@ -24,6 +24,35 @@
         padding: 20px;
     }
     
+    
+		    	/* ===== HOME ICON BUTTON ===== */
+		.home-btn {
+		    position: fixed;
+		    top: 25px;
+		    left: 25px;
+		    width: 52px;
+		    height: 52px;
+		    background: rgba(255, 255, 255, 0.2);
+		    backdrop-filter: blur(12px);
+		    border-radius: 50%;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    color: white;
+		    font-size: 22px;
+		    text-decoration: none;
+		    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+		    transition: var(--transition);
+		    z-index: 999;
+		    border: 1px solid rgba(255, 255, 255, 0.3);
+		}
+		
+		.home-btn:hover {
+		    background: var(--gradient);
+		    transform: scale(1.15);
+		    box-shadow: 0 18px 40px rgba(26, 188, 156, 0.6);
+		}
+    
     .container {
         display: flex;
         max-width: 500px;
@@ -287,6 +316,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+
+					<!-- Home Button -->
+	<a href="Home"  class="home-btn" title="Go to Home">
+	    <i class="fas fa-house"></i>
+	</a>
+	
     <div class="container">
        
         
